@@ -25,16 +25,36 @@
             opacity: 0.04; z-index: -1; 
         }
 
-        /* Subtiele zwevende lichtdeeltjes voor een magische sfeer */
+        /* --- Nieuwe Animaties voor Kruisjes --- */
         .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .particle {
-            position: absolute; border-radius: 50%; background: rgba(212, 196, 168, 0.3);
-            animation: floatUp 15s infinite linear;
+        
+        .particle-cross {
+            position: absolute; 
+            color: rgba(212, 196, 168, 0.4); /* Zacht goud/crème kleur */
+            font-family: 'Times New Roman', Times, serif; /* Klassiek lettertype voor het kruisje */
+            opacity: 0;
+            user-select: none;
+            /* Animatie: verschijnen, beetje zweven en dan wegebben */
+            animation: fadeCross var(--anim-duration) infinite ease-in-out;
+            animation-delay: var(--anim-delay);
         }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+
+        @keyframes fadeCross {
+            0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+            50% { opacity: 1; transform: scale(1) translateY(-10px); text-shadow: 0 0 15px rgba(212, 196, 168, 0.6); }
+            100% { opacity: 0; transform: scale(1.2) translateY(-30px); }
+        }
+
+        /* --- Het Logo Rechtsonder --- */
+        .corner-logo {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            width: 150px; /* Pas deze breedte aan op basis van je daadwerkelijke logo */
+            height: auto;
+            opacity: 0.8; /* Subtiel transparant zodat het niet de overhand neemt */
+            z-index: 20;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
         }
 
         /* --- De Kaart (Nu gecentreerd en rustig) --- */
@@ -99,18 +119,8 @@
     <div class="achtergrond-logo"></div>
 
     <div class="particles" id="particles"></div>
-    <script>
-        const container = document.getElementById('particles');
-        for(let i=0; i<15; i++) {
-            let p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.width = p.style.height = (Math.random() * 10 + 5) + 'px';
-            p.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            p.style.animationDelay = (Math.random() * 5) + 's';
-            container.appendChild(p);
-        }
-    </script>
+    
+    <img src="Logo_MGMK.jpg" alt="Logo" class="corner-logo">
 
     <div class="card">
         <h1>Welkom bij de huwelijksbijeenkomst!</h1>
@@ -131,6 +141,35 @@
     </div>
 
     <script>
+        // --- Genereer fading kruisjes ---
+        const container = document.getElementById('particles');
+        const numCrosses = 50; // Aantal kruisjes dat tegelijk animeert
+
+        for(let i = 0; i < numCrosses; i++) {
+            let cross = document.createElement('div');
+            cross.className = 'particle-cross';
+            cross.innerText = '✝'; // Het kruis symbool
+            
+            // Willekeurige startpositie
+            cross.style.left = Math.random() * 100 + 'vw';
+            cross.style.top = Math.random() * 100 + 'vh';
+            
+            // Willekeurige grootte (tussen 16px en 36px)
+            const fontSize = Math.floor(Math.random() * 20) + 16;
+            cross.style.fontSize = fontSize + 'px';
+            
+            // CSS Variabelen instellen voor de animatie
+            // Willekeurige duur tussen de 6 en 12 seconden voor het verschijnen/verdwijnen
+            const duration = (Math.random() * 6 + 6) + 's';
+            cross.style.setProperty('--anim-duration', duration);
+            
+            // Willekeurige vertraging zodat ze niet allemaal tegelijk beginnen
+            const delay = (Math.random() * 10) + 's';
+            cross.style.setProperty('--anim-delay', delay);
+            
+            container.appendChild(cross);
+        }
+
         // --- Fullscreen & Admin Logica ---
         let hasStartedFullscreen = false;
 
@@ -180,5 +219,3 @@
     </script>
 </body>
 </html>
-
-
